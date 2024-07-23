@@ -1,7 +1,7 @@
 all: main
 
 main: main.c
-	gcc -o $@ $< -O3
+	gcc -o $@ $< -O3 -lbsd
 
 test: main
 	./main

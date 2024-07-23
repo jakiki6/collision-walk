@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <bsd/stdlib.h>
 
 static inline uint64_t f(uint64_t x) {
     x ^= (x >> 33) | (x << 31);
@@ -48,7 +49,7 @@ void solve(uint64_t t, uint64_t a, uint64_t b) {
             i1--;
             i2--;
         } else {
-            printf("%llu and %llu hash to %llu\n", t1[i1], t2[i2], f(t1[i1]));
+            printf("%16llx and %16llx hash to %16llx\n", t1[i1], t2[i2], f(t1[i1]));
 
             assert(f(t1[i1]) == f(t2[i2]));
             return;
@@ -56,9 +57,7 @@ void solve(uint64_t t, uint64_t a, uint64_t b) {
     }
 }
 
-int main() {
-    uint64_t x = 1;
-
+void sieve(uint64_t x) {
     int c = 65536;
     int i = 0;
     uint64_t *d = malloc(c * sizeof(uint64_t));
@@ -70,7 +69,7 @@ int main() {
             for (int j = 0; j < i; j++) {
                 if (x == d[j]) {
                     solve(x, d[j - 1], d[i - 1]);
-                    return 0;
+                    return;
                 }
             }
 
@@ -81,5 +80,14 @@ int main() {
                 d = realloc(d, c * sizeof(uint64_t));
             }
         }
+    }
+}
+
+int main() {
+    uint64_t x;
+
+    while (1) {
+        arc4random_buf(&x, sizeof(uint64_t));
+        sieve(x);
     }
 }
